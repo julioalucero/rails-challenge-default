@@ -36,4 +36,52 @@ RSpec.describe User, type: :model do
 
     it { should validate_length_of(:metadata).is_at_most(User::METADATA_LENGTH) }
   end
+
+  describe 'scopes' do
+    let(:full_name) { 'Emmet Brown' }
+    let(:metadata) { 'male, age 68, doctor' }
+    let(:email) { 'back-to-future@example.com' }
+
+    let!(:success_query_result_user) { create(:user, full_name: full_name, metadata: metadata, email: email) }
+    let!(:user_2) { create(:user) }
+    let!(:user_3) { create(:user) }
+
+    describe '.by_full_name' do
+      it 'returns users matching the full_name' do
+       query = User.by_full_name(full_name)
+
+        expect(query).to include(success_query_result_user)
+        expect(query).not_to include(user_2, user_3)
+      end
+
+      it 'returns all users when full_name is blank' do
+        expect(User.by_full_name(nil)).to include(success_query_result_user, user_2, user_3)
+        expect(User.by_full_name('')).to include(success_query_result_user, user_2, user_3)
+      end
+    end
+
+    describe '.by_metadata' do
+      it 'returns users matching the metadata' do
+        expect(User.by_metadata('doctor')).to include(success_query_result_user)
+        expect(User.by_metadata('doctor')).not_to include(user_2, user_3)
+      end
+
+      it 'returns all users when metadata is blank' do
+        expect(User.by_metadata(nil)).to include(success_query_result_user, user_2, user_3)
+        expect(User.by_metadata('')).to include(success_query_result_user, user_2, user_3)
+      end
+    end
+
+    describe '.by_email' do
+      it 'returns users matching the email' do
+        expect(User.by_email(email)).to include(success_query_result_user)
+        expect(User.by_email(email)).not_to include(user_2, user_3)
+      end
+
+      it 'returns all users when email is blank' do
+        expect(User.by_email(nil)).to include(success_query_result_user, user_2, user_3)
+        expect(User.by_email('')).to include(success_query_result_user, user_2, user_3)
+      end
+    end
+  end
 end

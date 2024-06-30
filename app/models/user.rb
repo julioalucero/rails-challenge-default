@@ -10,4 +10,8 @@ class User < ApplicationRecord
   validates :key, presence: true, uniqueness: true, length: { maximum: STRING_LENGTH }
   validates :account_key, uniqueness: true, allow_blank: true, length: { maximum: STRING_LENGTH }
   validates :metadata, length: { maximum: METADATA_LENGTH }
+
+  scope :by_full_name, ->(full_name) { where('full_name ILIKE ?', "%#{full_name}%") if full_name.present? }
+  scope :by_metadata,  ->(metadata)  { where('metadata ILIKE ?',   "%#{metadata}%") if metadata.present? }
+  scope :by_email,     ->(email)     { where('email ILIKE ?',         "%#{email}%") if email.present? }
 end

@@ -48,3 +48,4 @@ docker-compose.yml
 
 /node_modules
 /*.swp
+.byebug_history
