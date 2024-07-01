@@ -49,4 +49,15 @@ RSpec.describe "Users", type: :request do
       expect(response).to have_http_status(:unprocessable_entity)
     end
   end
+
+  describe "POST /create" do
+
+    it 'return a http success'
+
+    it 'creates a new user'
+
+    context 'when the creation does not success' do
+      it 'returns an Unprocessable Entity with the list of all errors'
+    end
+  end
 end
