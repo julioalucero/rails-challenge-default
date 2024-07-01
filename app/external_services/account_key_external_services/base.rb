@@ -9,14 +9,19 @@ module AccountKeyExternalServices
       @key = key
     end
 
+    # TODO: handle errors, log error or success
     def call
+      user.update!(account_key: request.body['account_key']) if request.success?
+    end
+
+    private
+
+    def request
       Faraday.post(ROOT_URL) do |req|
         req.headers['Content-Type'] = 'application/json'
         req.body = body
       end
     end
-
-    private
 
     def body
       { email: email, key: key }.to_json

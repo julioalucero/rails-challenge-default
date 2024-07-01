@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe "Users", type: :request do
+RSpec.describe "Api::V1::Users", type: :request do
   let(:email) { 'user-0@example.com' }
   let(:phone_number) { '5551235555' }
   let(:key) { '72ae25495a7981c40622d49f9a52e4f1565c90f048f59027bd9c8c8900d5c3d8' }
@@ -12,7 +12,7 @@ RSpec.describe "Users", type: :request do
 
       before do
         create(:user, email: email, phone_number: phone_number, key: key, account_key: account_key)
-        get users_path, params: params
+        get api_v1_users_path, params: params
       end
 
       subject(:json_response) { JSON.parse(response.body) }
@@ -38,13 +38,13 @@ RSpec.describe "Users", type: :request do
     end
 
     it 'return 422 Unprocessable Entity for unsearchable unsearchable' do
-      get users_path, params: { key: true }
+      get api_v1_users_path, params: { key: true }
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
 
     it 'return 422 Unprocessable Entity for not existing ones' do
-      get users_path, params: { cellphone: '23048092384' }
+      get api_v1_users_path, params: { cellphone: '23048092384' }
 
       expect(response).to have_http_status(:unprocessable_entity)
     end
